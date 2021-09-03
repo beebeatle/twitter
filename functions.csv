@@ -1,2 +1,5 @@
 Send Like to the given Message
 Get Messages of the given User
+Check if Message is Liked
+Skip Liking Message if Already Liked
+Get Likes of the given message
