@@ -1,0 +1,83 @@
+Get Output and Save to the Database :: Python
+ 
+Postman Craft API via YAML
+Design and mock API in Postman
+ 
+Send msesages
+
+Put on schedule
+
+Retweets
+
+Scanning
+
+Call from local Python
+
+Separate files
+
+Put to the file
+
+Put to the database
+
+Deploy
+
+Commit to GitHub
+
+Import Collections
+
+Collections help reuse and Sharing
+
+Postman collections :: save
+
+Postman credentials
+
+Create a Monitor to see results of automated tests
+
+Create a test on the result. Tests are written in JS
+
+Connect to IDE to see methods
+
+Connect Postman Web IDE to GitHub
+
+Do an automatic Like
+
+Adjust scope
+
+Inherit Authorization
+
+Plan for a week
+
+Work through a collection of responses on the fly
+
+Log the response depending on the log level
+
+Tweet Get User ID by User Name :: make it public
+
+Friends of Friends
+
+Map to LinkedIn and Facebook
+
+Send a message
+
+Like a message
+
+Add a user
+
+Check Authorization Inheritance
+
+Record a blog like Kirill's English: minimalism
+
+Algorithm:
+
+Queues
+
+
+Get tweets of the given user with its IDs
+Get User IDs who liked this tweet
+
+
+Save new friends and source of these friends (for example luxoft)
+Not Logging only but CSV file first, and then Database
+
+
+Create My Class
