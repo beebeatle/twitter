@@ -71,13 +71,10 @@ Algorithm:
 
 Queues
 
-
 Get tweets of the given user with its IDs
 Get User IDs who liked this tweet
-
 
 Save new friends and source of these friends (for example luxoft)
 Not Logging only but CSV file first, and then Database
 
-
-Create My Class
+Create My Class with direct calls to Twitter API
