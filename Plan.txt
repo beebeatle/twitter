@@ -1,3 +1,5 @@
+BACKLOG OF IDEAS FOR A TWITTER BOT
+
 Get Output and Save to the Database :: Python
  
 Postman Craft API via YAML
@@ -11,17 +13,17 @@ Retweets
 
 Scanning
 
-Call from local Python
+Call from local Python +
 
 Separate files
 
 Put to the file
 
-Put to the database
+Put to the database +
 
 Deploy
 
-Commit to GitHub
+Commit to GitHub +
 
 Import Collections
 
@@ -39,7 +41,7 @@ Connect to IDE to see methods
 
 Connect Postman Web IDE to GitHub
 
-Do an automatic Like
+Do an automatic Like +
 
 Adjust scope
 
@@ -78,3 +80,20 @@ Save new friends and source of these friends (for example luxoft)
 Not Logging only but CSV file first, and then Database
 
 Create My Class with direct calls to Twitter API
+
+Limitations:
+- Like not more then one tweet of the given user a day
+
+Analytics:
+- Regions 
+- Regions by Date of Joining
+- Keep Audience of the group "Followed by Bot" for further analysys and unFollowing in a week
+
+Run Bot in Autonomous mode
+
+Identify New Subscribers
+
+Analyze if New Subscribers are a part of Target Audience
+
+Set Daily Target
+Compare Actual to Daily Target
