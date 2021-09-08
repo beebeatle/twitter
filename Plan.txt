@@ -92,8 +92,9 @@ Analytics:
 Run Bot in Autonomous mode
 
 Identify New Subscribers
-
-Analyze if New Subscribers are a part of Target Audience
+- Validate source of new subscribers
+- Analyze if New Subscribers are a part of Target Audience
 
 Set Daily Target
 Compare Actual to Daily Target
+
