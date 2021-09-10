@@ -37,7 +37,9 @@ my_api = tweepy.API(my_auth)
 
 logging.basicConfig(handlers=[logging.FileHandler(LogFileName,'w', 'utf-8')],level=logging.INFO,format='%(asctime)s -%(levelname)s-%(message)s')
 
-connection = pymysql.connect(host="localhost", user="root", passwd="", database="twitter")
+#print (variables.database_host,variables.database_user,variables.database_passwd, variables.database)
+connection = pymysql.connect(host=variables.database_host, user=variables.database_user, passwd=""+variables.database_passwd+"", database=variables.database)
+#connection = pymysql.connect(host="localhost", user="root", passwd="", database="twitter")
 cursor = connection.cursor()
 
 headers = {
