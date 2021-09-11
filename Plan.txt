@@ -81,8 +81,9 @@ Not Logging only but CSV file first, and then Database
 
 Create My Class with direct calls to Twitter API
 
-Limitations:
+Limitations on Likes:
 - Like not more then one tweet of the given user a day
+- Like only recent tweets so the old tweets are not liked
 
 Analytics:
 - Regions 
@@ -98,3 +99,7 @@ Identify New Subscribers
 Set Daily Target
 Compare Actual to Daily Target
 
+Setup a queue
+
+Normalizing scripts
+- Take from activities and move into uniques users, and links between users and ref accounts

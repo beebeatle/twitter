@@ -12,10 +12,10 @@ import settings
 import sys
 
 # Pick Variables
-host=variables.database_host
-user=variables.database_user
-passwd=variables.database_passwd
-database=variables.database
+db_host=variables.db_host
+db_user=variables.db_user
+db_passwd=variables.db_passwd
+db_name=variables.db_name
 
 my_consumer_key = variables.my_consumer_key
 my_consumer_secret= variables.my_consumer_secret
@@ -38,7 +38,7 @@ my_api = tweepy.API(my_auth)
 logging.basicConfig(handlers=[logging.FileHandler(LogFileName,'w', 'utf-8')],level=logging.INFO,format='%(asctime)s -%(levelname)s-%(message)s')
 
 #print (variables.database_host,variables.database_user,variables.database_passwd, variables.database)
-connection = pymysql.connect(host=variables.database_host, user=variables.database_user, passwd=""+variables.database_passwd+"", database=variables.database)
+connection = pymysql.connect(host=db_host, user=db_user, passwd=db_passwd, database=db_name)
 #connection = pymysql.connect(host="localhost", user="root", passwd="", database="twitter")
 cursor = connection.cursor()
 
@@ -103,7 +103,7 @@ def RunUpdate(run_id,users_count,messages_count,likes_count):
 
 def GetAccounts():
     accounts=[]
-    Sql="SELECT code FROM Accounts"
+    Sql="SELECT code FROM Accounts order by weight desc"
     records=cursor.execute(Sql)
     rows = cursor.fetchall()
     return rows
