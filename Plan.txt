@@ -84,6 +84,7 @@ Create My Class with direct calls to Twitter API
 Limitations on Likes:
 - Like not more then one tweet of the given user a day
 - Like only recent tweets so the old tweets are not liked
+- 
 
 Analytics:
 - Regions 
@@ -103,3 +104,9 @@ Setup a queue
 
 Normalizing scripts
 - Take from activities and move into uniques users, and links between users and ref accounts
+
+Keep Rate Limits, count actuals and compare to Limits
+
+Another Bot retweeting messages
+
+Capture Rate Exceeded error and Log

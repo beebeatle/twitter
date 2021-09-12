@@ -103,7 +103,7 @@ def RunUpdate(run_id,users_count,messages_count,likes_count):
 
 def GetAccounts():
     accounts=[]
-    Sql="SELECT code FROM Accounts order by weight desc"
+    Sql="SELECT code FROM Accounts where enabled='1' order by weight desc"
     records=cursor.execute(Sql)
     rows = cursor.fetchall()
     return rows
@@ -131,86 +131,12 @@ def getMessages(userId):
     response = requests.get(url, headers=headers)
     json_data = json.loads(response.text)
     return json_data
-# Functions Definition is Complete
 
 
-accountsTotal=0
-accounts=GetAccounts()
-
-i=0
-for acc in accounts:
-    print (acc[0])
-    userNameInput=acc[0]
-    accountsTotal=accountsTotal+1
-    i=i+1
-    if i>0:
-        break
-    
-
-command=sys.argv[0]
-#userNameInput=sys.argv[1]
-ref_user_name=userNameInput
-
-
-# Converts Name into ID
-userIdInput=GetUserDetails(userNameInput)
-
-# Print Intake from User
-print ("User Name",userNameInput)
-print ("User ID",userIdInput)
-
-run_id=str(RunRegister(userNameInput,command))
-
-# Get Followers of the given User
-friends=my_api.followers_ids(userIdInput)
-FriendsCount=len(friends)
-
-print ("Total Followers captured: ",FriendsCount)
-
-# Get Users (Followers)
-#MyFollowers=my_api.followers()
-
-# Walk through Followers
-MyCount=0
-totalLikes=0
-skippedMany=0
-skippedDM=0
-messagesTotal=0
-likeFail=0
-for i in friends:
-    
-    if MyCount >= FollowersLimit:
-        break
-
-    MyCount=MyCount+1  
-    userId=str(i)
-    userName=GetUserDetailsById(userId)
-    
-    
-    print("\n--------",MyCount,".",userName,userId,"\n")
-
-    json_data = getMessages(userId)
-   
-    myCountM=0
-    
-# Walk through Messages  
-    tweetId=""
-    myCountLikes=0
-    
-    try:
-        CountMessages=len(json_data["data"])
-        print ("Messages captured for the user:", CountMessages)
-    except:
-        print ("No Messages detected")
-        continue
-    
-    # Process given Message
-    for m in json_data["data"]:
+def processMessage(userName,userId,myCountLikes,totalLikes,likeFail,skippedDM,skippedMany,ref_user_name,run_id,myCountM,messagesTotal,m):
         messagesTotal=messagesTotal+1
-        # Connect to the database
-
-
         myCountM=myCountM+1
+
         tweetId=m["id"]
         print("\n",myCountM,tweetId)
 
@@ -234,7 +160,6 @@ for i in friends:
             connection.commit()
 
 
-
         # Check type of message if it's a DM or RT
         if "@" in messageText:
             print("@ Found!")
@@ -247,7 +172,6 @@ for i in friends:
                 logMessage="Skipped Too Many "+userName+"/"+userId+" "+tweetId
                 logging.info(logMessage)
                 skippedMany=skippedMany+1
-                continue 
             else:
                 print ("Sending a like")
                 result=SendLike (tweetId,userId,userName,ref_user_name,run_id)
@@ -257,7 +181,93 @@ for i in friends:
                     totalLikes=totalLikes+1
                 else:
                     likeFail=likeFail+1
+        my_counts = {
+            "myCountLikes":myCountLikes,
+            "likeFail":likeFail,
+            "totalLikes":totalLikes,
+            "skippedMany":skippedMany,
+            "skippedDM":skippedDM,
+            "messagesTotal":messagesTotal,
+            "myCountM":myCountM
+        }
 
+        return my_counts
+    
+# Functions Definition is Complete
+
+
+accountsTotal=0
+accounts=GetAccounts()
+command=sys.argv[0]
+
+messagesTotal=0
+MyCount=0
+totalLikes=0
+skippedMany=0
+skippedDM=0
+likeFail=0
+
+print ("Accounts selected:", len(accounts))
+for acc in accounts:
+    print ("\n\nACCOUNT: ",acc[0])
+    userNameInput=acc[0]
+    accountsTotal=accountsTotal+1
+    
+    ref_user_name=userNameInput
+
+    # Converts Name into ID
+    userIdInput=GetUserDetails(userNameInput)
+
+    # Print Intake from User
+    print ("User Name",userNameInput)
+    print ("User ID",userIdInput)
+
+    run_id=str(RunRegister(userNameInput,command))
+
+    # Get Followers of the given User
+    friends=my_api.followers_ids(userIdInput)
+    FriendsCount=len(friends)
+
+    print ("Total Followers captured: ",FriendsCount)
+    # Walk through Followers
+
+
+    for i in friends:
+    
+        if MyCount >= FollowersLimit:
+            break
+
+        MyCount=MyCount+1  
+        userId=str(i)
+        userName=GetUserDetailsById(userId)
+    
+        print("\n--------",MyCount,".",userName,userId,"\n")
+
+        json_data = getMessages(userId)
+    
+        # Walk through Messages
+        myCountM=0 
+        tweetId=""
+        myCountLikes=0
+    
+        try:
+            CountMessages=len(json_data["data"])
+            print ("Messages captured for the user:", CountMessages)
+        except:
+            print ("No Messages detected")
+            continue
+    
+        # Process given Message
+        for m in json_data["data"]:
+
+            my_counts=processMessage(userName,userId,myCountLikes,totalLikes,likeFail,skippedDM,skippedMany,ref_user_name,run_id,myCountM,messagesTotal,m)
+            myCountLikes=my_counts["myCountLikes"]
+            likeFail=my_counts["likeFail"]
+            totalLikes=my_counts["totalLikes"]
+            skippedMany=my_counts["skippedMany"]
+            skippedDM=my_counts["skippedDM"]
+            messagesTotal=my_counts["messagesTotal"]
+            myCountM=my_counts["myCountM"]
 
 
 print ("Summary for the Run: \
@@ -272,8 +282,6 @@ print ("Summary for the Run: \
 ")
 
 RunUpdate(str(run_id),str(MyCount),str(messagesTotal),str(totalLikes))
-
-
 
 connection.close()
 
