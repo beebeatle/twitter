@@ -110,3 +110,5 @@ Keep Rate Limits, count actuals and compare to Limits
 Another Bot retweeting messages
 
 Capture Rate Exceeded error and Log
+
+Capture messages and its IDs and avoid calling these again so we save on Rate Excess limit
