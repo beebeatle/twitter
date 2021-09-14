@@ -132,6 +132,11 @@ def getMessages(userId):
     json_data = json.loads(response.text)
     return json_data
 
+def checkUser(userId):
+    sql="SELECT id FROM activities where target_user_id='"+userId+"'"
+    records=cursor.execute(sql)
+    return cursor.fetchone() is not None
+
 
 def processMessage(userName,userId,myCountLikes,totalLikes,likeFail,skippedDM,skippedMany,ref_user_name,run_id,myCountM,messagesTotal,m):
         messagesTotal=messagesTotal+1
@@ -192,27 +197,29 @@ def processMessage(userName,userId,myCountLikes,totalLikes,likeFail,skippedDM,sk
         }
 
         return my_counts
-    
 # Functions Definition is Complete
 
-
+#Counters
 accountsTotal=0
-accounts=GetAccounts()
-command=sys.argv[0]
-
 messagesTotal=0
-MyCount=0
+
 totalLikes=0
 skippedMany=0
 skippedDM=0
 likeFail=0
 
+command=sys.argv[0]
+accounts=GetAccounts()
+
+
+run_id=str(RunRegister("",command))
+
 print ("Accounts selected:", len(accounts))
 for acc in accounts:
-    print ("\n\nACCOUNT: ",acc[0])
-    userNameInput=acc[0]
+    MyCount=0
     accountsTotal=accountsTotal+1
-    
+    print ("\n-------\n ["+str(accountsTotal)+"] ACCOUNT: ",acc[0],"\n-------")
+    userNameInput=acc[0]   
     ref_user_name=userNameInput
 
     # Converts Name into ID
@@ -222,15 +229,12 @@ for acc in accounts:
     print ("User Name",userNameInput)
     print ("User ID",userIdInput)
 
-    run_id=str(RunRegister(userNameInput,command))
-
     # Get Followers of the given User
     friends=my_api.followers_ids(userIdInput)
     FriendsCount=len(friends)
 
     print ("Total Followers captured: ",FriendsCount)
     # Walk through Followers
-
 
     for i in friends:
     
@@ -239,6 +243,16 @@ for acc in accounts:
 
         MyCount=MyCount+1  
         userId=str(i)
+
+        checkUserFlag=checkUser(userId)
+        #print (checkUserFlag)
+       
+        if checkUserFlag is False:
+            print ("NOT FOUND. GOOD TO GO")
+        else:
+            print ("FOUND IN THE LOG. SKIP.","User ID:", userId)
+            continue
+
         userName=GetUserDetailsById(userId)
     
         print("\n--------",MyCount,".",userName,userId,"\n")
