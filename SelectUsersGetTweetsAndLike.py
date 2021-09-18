@@ -127,7 +127,7 @@ def GetUserDetailsById(userId):
     return json_data["data"]["username"]
 
 def getMessages(userId):
-    url = "https://api.twitter.com/2/users/"+userId+"/tweets?max_results=5"
+    url = "https://api.twitter.com/2/users/"+userId+"/tweets?max_results=5&exclude=retweets,replies"
     response = requests.get(url, headers=headers)
     json_data = json.loads(response.text)
     return json_data
@@ -137,6 +137,11 @@ def checkUser(userId):
     records=cursor.execute(sql)
     return cursor.fetchone() is not None
 
+def checkLike(messageId):
+    sql="SELECT id FROM activities where type='like' and message_id='"+messageId+"'"
+    print (sql)
+    records=cursor.execute(sql)
+    return cursor.fetchone() is not None
 
 def processMessage(userName,userId,myCountLikes,totalLikes,likeFail,skippedDM,skippedMany,ref_user_name,run_id,myCountM,messagesTotal,m):
         messagesTotal=messagesTotal+1
@@ -170,9 +175,15 @@ def processMessage(userName,userId,myCountLikes,totalLikes,likeFail,skippedDM,sk
             print("@ Found!")
             logMessage="Skipped @ "+userName+"/"+userId+" "+tweetId
             logging.info(logMessage)
-            skippedDM=skippedDM+1
+            skippedDM=skippedDM+1            
         else:
-            if myCountLikes > 0:
+            checkLikeFlag=checkLike(tweetId)
+            if checkLikeFlag is True:
+                print("Skipped Like: Already liked this message")
+                logMessage="Already liked this message "+userName+"/"+userId+" "+tweetId
+                logging.info(logMessage)
+                skippedMany=skippedMany+1                
+            elif myCountLikes > 0:
                 print("Skipped Like: Too Much for the session for this user")
                 logMessage="Skipped Too Many "+userName+"/"+userId+" "+tweetId
                 logging.info(logMessage)
@@ -207,10 +218,10 @@ totalLikes=0
 skippedMany=0
 skippedDM=0
 likeFail=0
+activityCount=0
 
 command=sys.argv[0]
 accounts=GetAccounts()
-
 
 run_id=str(RunRegister("",command))
 
@@ -231,6 +242,7 @@ for acc in accounts:
 
     # Get Followers of the given User
     friends=my_api.followers_ids(userIdInput)
+    activityCount=activityCount+1
     FriendsCount=len(friends)
 
     print ("Total Followers captured: ",FriendsCount)
@@ -254,10 +266,12 @@ for acc in accounts:
             continue
 
         userName=GetUserDetailsById(userId)
+        activityCount=activityCount+1
     
         print("\n--------",MyCount,".",userName,userId,"\n")
 
         json_data = getMessages(userId)
+        activityCount=activityCount+1
     
         # Walk through Messages
         myCountM=0 
