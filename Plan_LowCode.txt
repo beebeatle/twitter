@@ -1,0 +1,34 @@
+Low Code Bot Strategy
+
+Frequency of retweets - one a day - then one every 6 hours
+
+Hosting and Scheduling on Beefficient first
+
+Hosting and Scheduling on AWS as a second instance of the bot
+
+Differentiate Source Accounts
+
+Ranking Accounts: premium, regular | corporate, individual
+
+Classifying accounts based on Number of Recent Tweets, Numbers of Followers, Numbers of Following, Cross Match Portion
+
+Collecting database : 100K records, 1M records, 10M records, 100M records -> getting to the other database
+
+Logging
+
+Mind the limits
+
+Use approach of queues: decoupling
+
+Using a separate database - reconcile accounts after 
+
+Set and monitor targets - retweets of my posts - getting new followers 
+
+Understand rules of posts to be retweeted
+
+Like users of the target groups
+
+No following of other groups
+
+Later: leverage volumes: data lake as a material for Machine Learning : classifying 
+

@@ -1,13 +1,26 @@
 class Bot:
 
-    def GetAccountsToLook(self,cursor):
-        Sql="SELECT twitter_id FROM accounts where code=twitter_id limit 100"
+    def GetAccountIdsForLike(self,cursor,limit):
+        accounts=[]
+        Sql="SELECT twitter_id,code FROM Accounts where code!=twitter_id and enabled!=2 limit "+str(limit)
         records=cursor.execute(Sql)
         rows = cursor.fetchall()
         return rows
 
-    def UpdateAccountDetails(self,cursor,connection,twitter_id,user_name):
+    def GetAccountsToLook(self,cursor):
+        Sql="SELECT twitter_id, enabled FROM accounts where code=twitter_id order by weight desc limit 2"
+        records=cursor.execute(Sql)
+        rows = cursor.fetchall()
+        return rows
+
+    def UpdateAccountDetailsById(self,cursor,connection,twitter_id,user_name):
         sql="update accounts set code='"+user_name+"' where twitter_id='"+twitter_id+"'"
+        #print(sql)
+        records=cursor.execute(sql)
+        connection.commit()
+
+    def UpdateAccountDetailsByName(self,cursor,connection,twitter_id,user_name):
+        sql="update accounts set twitter_id='"+twitter_id+"' where code='"+user_name+"'"
         #print(sql)
         records=cursor.execute(sql)
         connection.commit()
@@ -37,6 +50,17 @@ class Bot:
         print (row)
         return row is not None        
 
+    def checkLike(self,cursor,messageId):
+        sql="SELECT id FROM activities where type='like' and message_id='"+messageId+"'"
+        print (sql)
+        records=cursor.execute(sql)
+        return cursor.fetchone() is not None
+
+    def checkUserLike(self,cursor,user_id):
+        sql="SELECT id FROM activities where type='like' and target_user_id='"+user_id+"'"
+        print (sql)
+        records=cursor.execute(sql)
+        return cursor.fetchone() is not None
 
     def InsertLink(self,cursor,connection,account,parent_code,parent_id):
         account=str(account)
@@ -46,6 +70,24 @@ class Bot:
             resp=cursor.execute(sql)
         except:
             print ("Error inserting a link: "+account)
+
+        connection.commit()
+
+
+    def checkMessage(self,cursor,id):
+        sql="SELECT id FROM messages where message_id='"+str(id)+"'"
+        print (sql)
+        records=cursor.execute(sql)
+        return cursor.fetchone() is not None
+
+    def saveMessage(self,cursor,connection,id,text):
+        try:
+            text.encode("utf8")
+            sql="insert into messages (message_id,message_text) values ('"+str(id)+"','"+text+"')"
+            print (sql)
+            resp=cursor.execute(sql)
+        except:
+            print ("Error saving a message")
 
         connection.commit()
 
