@@ -38,24 +38,27 @@ my_auth.set_access_token(my_access_token, my_access_token_secret)
 my_api = tweepy.API(my_auth)
 
 bot=Bot()
-rows=bot.GetUsersToFollow(cursor)
+rows=bot.GetMessagesForLike(cursor)
 
 print ("Total:",len(rows))
+
 count=0
 for row in rows:
-    if count < 100:
+    if count < 50:
         count=count+1
         id=row[0]
-        print (str(count)+".","Id: ",id)
+        text=row[1]
+        user_code=row[3]
+        print (str(count)+".","Id: ",id,"Text:",text, "User code:", user_code)
         try:
-            FollowFlag=my_api.create_friendship(id)
+            likeFlag=my_api.create_favorite(id)
             #print (retweetFlag)
-            print ("Set as Followed")
+            print ("Set as Liked")
             status=2
-            bot.UpdateTargetStatus(cursor,connection,id,status)
+            bot.UpdateMessageLikeStatus(cursor,connection,id,status)
         except:
-            print ("Error.Skipping.")
+            print ("Error. Set as Skipped")
             status=3
-            bot.UpdateTargetStatus(cursor,connection,id,status)   
+            bot.UpdateMessageLikeStatus(cursor,connection,id,status)
 
 connection.close()
