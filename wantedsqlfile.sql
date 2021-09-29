@@ -1,3 +1,7 @@
+-- Counts of Likes for last day
+SELECT count(distinct(id)) FROM `message_like` WHERE status=2 and updated_at > '2021-09-28' ---307
+
+
 
 SELECT t.user_id, m.message_id FROM target_follower t LEFT OUTER JOIN MESSAGES m on m.user_id=t.user_id;
 
