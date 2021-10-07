@@ -1,12 +1,12 @@
 class Bot:
 
     def getUsersToEnrich(self,cursor):
-        Sql="select user_id from users where name='' and enabled!='3'"
+        Sql="select user_id from users where name='' and status!='3'"
         records=cursor.execute(Sql)
         return cursor.fetchall()
 
     def enrichUser(self,cursor,connection,user_id,username,name):
-        Sql="update users set name='"+str(name)+"', user_code='"+str(username)+"' where user_id='"+str(user_id)+"'"
+        Sql="update users set name=\""+str(name)+"\", user_code='"+str(username)+"' where user_id='"+str(user_id)+"'"
         print(Sql)
         records=cursor.execute(Sql)
         connection.commit()

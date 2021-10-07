@@ -5,14 +5,17 @@ class Twitter:
 
     def GetUserDetailsById(self,userId,headers):
         urlUser="https://api.twitter.com/2/users/"+str(userId)
+        print(urlUser)
         try:
             response = requests.get(urlUser, headers=headers)
             json_data = json.loads(response.text)
+            return json_data["data"]
         except:
             print (response.text)
+            return False
         #print (response.code)
         print (response.text)
-        return json_data["data"]["username"]
+        
 
     def GetUserDetailsByName(self,userName,headers):
         urlUser="https://api.twitter.com/2/users/by/username/"+userName
@@ -32,3 +35,17 @@ class Twitter:
         response = requests.get(url, headers=headers)
         json_data = json.loads(response.text)
         return json_data["data"]
+
+    def getDetailsOfMessage(self,message_id,headers):
+        url = "https://api.twitter.com/1.1/statuses/show.json?id="+str(message_id)
+        response = requests.get(url, headers=headers)
+        json_data = json.loads(response.text)
+        return json_data
+
+    def getFollowers(self,headers):
+        url = "https://api.twitter.com/1.1/followers/ids.json?cursor=-1&screen_name=LowCodeApp2020&count=5000"
+        response = requests.get(url, headers=headers)
+        json_data = json.loads(response.text)
+        return json_data
+
+        
