@@ -43,7 +43,7 @@ class Twitter:
         return json_data
 
     def getFollowers(self,headers):
-        url = "https://api.twitter.com/1.1/followers/ids.json?cursor=-1&screen_name=LowCodeApp2020&count=5000"
+        url = "https://api.twitter.com/1.1/followers/ids.json?cursor=-1&screen_name=LowCodeWins&count=5000"
         response = requests.get(url, headers=headers)
         json_data = json.loads(response.text)
         return json_data
