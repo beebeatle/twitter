@@ -154,7 +154,15 @@ class Bot:
 
     def GetMessagesForRetweet(self,cursor):
         Sql="SELECT message_id FROM message_retweet where status='1' order by updated_at desc"
-        records=cursor.execute(Sql)
+
+        sql="SELECT r.message_id\
+            FROM message_retweet r\
+                join message m on m.message_id=r.message_id \
+                    WHERE r.status=1 \
+                        and m.user_id not in (SELECT distinct m.user_id FROM message_retweet r join message m on m.message_id=r.message_id  WHERE r.status=2)\
+                            order by r.updated_at desc"
+
+        records=cursor.execute(sql)
         rows = cursor.fetchall()
         return rows
 
