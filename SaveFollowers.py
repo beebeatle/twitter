@@ -2,6 +2,7 @@ from typing import Text
 import requests
 import json
 import tweepy 
+import pathlib
 
 import logging
 import pymysql
@@ -25,6 +26,8 @@ db_user=variables.db_user
 db_passwd=variables.db_passwd
 db_name=variables.db_name
 
+logPath=variables.logPath
+
 connection = pymysql.connect(host=db_host, user=db_user, passwd=db_passwd, database=db_name)
 cursor = connection.cursor()
 
@@ -42,7 +45,10 @@ headers = {
   'Authorization': 'Bearer '+my_bearer_token+''
     }
 
-logging.basicConfig(handlers=[logging.FileHandler("Log/SaveFollower.log",'w', 'utf-8')],level=logging.INFO,format='%(asctime)s -%(levelname)s-%(message)s')
+folderPath=str(pathlib.Path().resolve())
+logFileName=folderPath+''+logPath+'SaveFollower.log'
+print(logFileName)
+logging.basicConfig(handlers=[logging.FileHandler(logFileName,'w', 'utf-8')],level=logging.INFO,format='%(asctime)s -%(levelname)s-%(message)s')
 
 fs=twitter.getFollowers(headers)
 existingF=fs['ids']
