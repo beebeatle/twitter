@@ -21,6 +21,13 @@ class Data:
         volume=rows[0]
         return volume
 
+    def GetUsersUnFollowed(self,cursor):
+        Sql="SELECT count(distinct(id)) FROM user_follow WHERE status=4 and updated_at >= now() - INTERVAL 1 DAY "
+        cursor.execute(Sql)
+        rows = cursor.fetchone()
+        volume=rows[0]
+        return volume
+
     def GetMessagesSourced(self,cursor):
         Sql="SELECT count(distinct(id)) FROM message WHERE updated_at >= now() - INTERVAL 1 DAY "
         cursor.execute(Sql)
